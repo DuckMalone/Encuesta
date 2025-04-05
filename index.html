@@ -28,6 +28,13 @@
             position: relative;
         }
 
+        video {
+            width: 40vw;  
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        }
+
         #video {
             display: none;
         }
@@ -85,13 +92,12 @@
         }
 
         .modal-blue {
-            background-color: white;
+            background-color: blue;
         }
 
         @media (max-width: 1920px) {
             video {
                 width: 50vw; 
-                height: 30vw; 
             }
 
             .rotating {
@@ -137,60 +143,62 @@
 
     <div id="video">
         <div class="video-container">
-            <img id="img1" class="rotating" src="https://i.imgur.com/sY0XbHo.png" alt="Imagen Izquierda">
-            <video id="videoFrame" controls>
-                <source src="https://i.imgur.com/QZOuuVy.mp4" type="video/mp4">
-                Tu navegador no soporta el formato de video.
+            <img id="img1" class="rotating" src="" alt="Imagen Izquierda">
+            <video id="videoPlayer" controls autoplay playsinline>
+                <source id="videoSource" src="" type="video/mp4">
+                Tu navegador no soporta el elemento de video.
             </video>
-            <img id="img2" class="rotating" src="https://i.imgur.com/sY0XbHo.png" alt="Imagen Derecha">
+            <img id="img2" class="rotating" src="" alt="Imagen Derecha">
         </div>
     </div>
 
     <div id="modal-watona" class="modal">
         <div class="modal-content">
-            <h2 id="modal-watona-msg"></h2>
+            <h2 id="mensaje-watona"></h2>
             <button class="close-btn" onclick="cerrarModal('modal-watona')">Cerrar</button>
         </div>
     </div>
 
     <div id="modal-fit" class="modal">
         <div class="modal-content modal-blue">
-            <h2 id="modal-fit-msg"></h2>
+            <h2 id="mensaje-fit"></h2>
             <button class="close-btn" onclick="cerrarModal('modal-fit')">Cerrar</button>
         </div>
     </div>
 
     <script>
         function verificarPeso() {
-            var peso = document.getElementById("peso").value;
+            var peso = parseFloat(document.getElementById("peso").value);
             var genero = document.getElementById("genero").value;
             var mensaje = document.getElementById("mensaje");
             var video = document.getElementById("video");
-            var videoFrame = document.getElementById("videoFrame");
+            var videoSource = document.getElementById("videoSource");
+            var videoPlayer = document.getElementById("videoPlayer");
             var img1 = document.getElementById("img1");
             var img2 = document.getElementById("img2");
+            var mensajeWatona = "";
+            var mensajeFit = "";
+            var videoFit = "";
+            var videoWaton = "";
+            var imgFit = "";
+            var imgWaton = "";
 
-            if (peso === "" || peso <= 0) {
+            if (!peso || peso <= 0) {
                 mensaje.textContent = "Por favor, ingrese un peso válido.";
                 video.style.display = "none";
                 return;
             }
 
-            peso = parseFloat(peso);
-
-            // Variables por género
-            let videoFit, videoWaton, imgFit, imgWaton, mensajeWatona, mensajeFit;
-
             if (genero === "masculino") {
-                videoFit = "https://i.imgur.com/ca1IYJl.mp4?autoplay=1";
-                videoWaton = "https://i.imgur.com/gGlkfYi.mp4?autoplay=1";
+                videoFit = "https://i.imgur.com/ca1IYJl.mp4";
+                videoWaton = "https://i.imgur.com/gGlkfYi.mp4";
                 imgFit = "https://i.imgur.com/65JuVOx.png";
                 imgWaton = "https://i.imgur.com/Fb63Oq1.png";
                 mensajeWatona = "🚨 ¡Waton detectado! 🚨";
                 mensajeFit = "🎉 ¡No eres waton! 🎉";
             } else {
-                videoFit = "https://i.imgur.com/QZOuuVy.mp4?autoplay=1";
-                videoWaton = "https://i.imgur.com/CTAmtgz.mp4?autoplay=1";
+                videoFit = "https://i.imgur.com/QZOuuVy.mp4";
+                videoWaton = "https://i.imgur.com/CTAmtgz.mp4";
                 imgFit = "https://i.imgur.com/ehF8g4n.png";
                 imgWaton = "https://i.imgur.com/sY0XbHo.png";
                 mensajeWatona = "🚨 ¡Eres una Watoncita! 🚨";
@@ -199,18 +207,22 @@
 
             if (peso > 80) {
                 document.getElementById("modal-watona").style.display = "flex";
-                document.getElementById("modal-watona-msg").textContent = mensajeWatona;
+                document.getElementById("mensaje-watona").textContent = mensajeWatona;
+                mensaje.textContent = mensajeWatona;
                 video.style.display = "block";
-                videoFrame.src = videoWaton;
+                videoSource.src = videoWaton;
+                videoPlayer.load();
                 img1.src = imgWaton;
                 img2.src = imgWaton;
                 img1.classList.add("spin-animation");
                 img2.classList.add("spin-animation");
             } else {
                 document.getElementById("modal-fit").style.display = "flex";
-                document.getElementById("modal-fit-msg").textContent = mensajeFit;
+                document.getElementById("mensaje-fit").textContent = mensajeFit;
+                mensaje.textContent = mensajeFit;
                 video.style.display = "block";
-                videoFrame.src = videoFit;
+                videoSource.src = videoFit;
+                videoPlayer.load();
                 img1.src = imgFit;
                 img2.src = imgFit;
                 img1.classList.remove("spin-animation");
